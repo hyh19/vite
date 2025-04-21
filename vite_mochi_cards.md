@@ -74,6 +74,7 @@ Vite 的依赖预构建是指在开发服务器启动时，Vite 使用 {{esbuild
 2. **性能优化**：将有许多内部模块的 ESM 依赖项转换为单个模块，减少{{浏览器请求}}数量
 
 预构建的依赖会缓存在 {{`node_modules/.vite`}} 目录下。当以下情况发生时，缓存会失效：
+
 - {{package.json}} 的 `dependencies` 字段变化
 - {{vite.config.js}} 中与依赖相关的配置变化
 - {{lockfile}} 如 `package-lock.json` 变化
@@ -96,6 +97,7 @@ Tags: #Vite #Vite/Intermediate #Vite/Concept #Vite/HMR
 3. 无论应用大小如何，HMR 更新速度都保持{{一致}}
 
 Vite 为多个框架提供了开箱即用的 HMR 集成：
+
 - {{Vue}} 单文件组件
 - {{React}} 通过 Fast Refresh
 - {{Preact}} 通过官方集成
@@ -122,6 +124,7 @@ Vite 对 TypeScript 提供了开箱即用的支持，主要特点如下：
 4. 开发过程中，建议在单独的进程中运行 `tsc --noEmit --watch` 或使用 {{vite-plugin-checker}} 插件
 
 使用 TypeScript 时，需要注意以下配置选项：
+
 - 将 `compilerOptions.isolatedModules` 设置为 {{true}}
 - `useDefineForClassFields` 默认值取决于 `target` 配置
 - Vite 会忽略 `tsconfig.json` 中的 `target` 配置，开发时默认使用 {{esnext}}
@@ -160,6 +163,7 @@ console.log(import.meta.env.VITE_API_URL)
 ```
 
 Vite 还提供了几个内置的环境变量：
+
 - {{`import.meta.env.MODE`}}: 应用运行的模式
 - {{`import.meta.env.BASE_URL`}}: 部署的基本 URL
 - {{`import.meta.env.PROD`}}: 是否为生产环境
@@ -186,6 +190,7 @@ Vite 的生产构建过程依赖 {{Rollup}}，并提供了许多优化功能：
 5. **异步 Chunk 加载优化**：使用{{动态导入}}时自动分割代码
 
 常用的构建配置选项包括：
+
 - {{`build.target`}}：指定浏览器兼容性目标
 - {{`build.outDir`}}：指定输出目录，默认为 `dist`
 - {{`build.assetsDir`}}：指定静态资源目录，默认为 `assets`
@@ -209,36 +214,43 @@ Tags: #Vite #Vite/Intermediate #Vite/Usage #Vite/Core
 Vite 提供了多种方式来处理和引用静态资源：
 
 1. **导入为 URL**：导入静态资源会返回解析后的{{URL}}
+
    ```js
    import imgUrl from './img.png'
    ```
 
 2. **导入为字符串**：添加 {{`?raw`}} 后缀导入资源为字符串
+
    ```js
    import shaderString from './shader.glsl?raw'
    ```
 
 3. **导入为 Worker**：添加 {{`?worker`}} 或 {{`?sharedworker`}} 后缀
+
    ```js
    import Worker from './worker.js?worker'
    ```
 
 4. **导入脚本作为 Worker**：使用 {{`?url`}} 后缀获取资源 URL 而不是导入它
+
    ```js
    import workerUrl from './worker.js?url'
    ```
 
 5. **公共目录**：放在 {{`public`}} 目录下的资源不会被处理，但可以通过绝对路径引用
+
    ```html
    <img src="/favicon.ico">
    ```
 
 6. **`new URL(url, import.meta.url)`**：使用原生 JS {{URL 构造函数}}引用资源
+
    ```js
    const imgUrl = new URL('./img.png', import.meta.url).href
    ```
 
 静态资源处理的配置选项：
+
 - {{`assetsInclude`}}：指定额外的静态资源类型
 - {{`build.assetsInlineLimit`}}：小于此值的资源会被内联为 base64 URL
 
@@ -259,6 +271,7 @@ Vite 的插件系统主要基于 {{Rollup}} 的插件接口，同时添加了 Vi
 2. Vite 特有钩子可以处理特定的开发服务器功能，如 {{HMR}}
 
 插件应用规则：
+
 - 在开发中，Vite 开发服务器会调用插件的 {{Rollup 构建钩子}}
 - 某些钩子如 `transform` 在两种模式下都会调用
 - 使用 {{`enforce`}} 修饰符可以控制插件的执行顺序
@@ -267,6 +280,7 @@ Vite 的插件系统主要基于 {{Rollup}} 的插件接口，同时添加了 Vi
   - `post`：在 Vite 构建插件之后
 
 常见的 Vite 特有钩子：
+
 - {{`configureServer`}}：配置开发服务器
 - {{`transformIndexHtml`}}：转换 HTML 内容
 - {{`handleHotUpdate`}}：自定义 HMR 更新处理
@@ -291,12 +305,14 @@ Vite 提供了内置的 {{服务端渲染}}（SSR）支持，主要特点包括�
 3. **源码转换**：与客户端开发类似，依赖预构建、CSS 处理等功能在 SSR 中也可用
 
 使用 Vite 进行 SSR 开发的基本流程：
+
 1. 创建一个{{服务器入口}}文件
 2. 在开发中编写逻辑来{{加载和渲染}}虚拟模块 `*.js?url` 或 `import.meta.url`
 3. 添加{{预加载指令}}优化生产环境加载性能
 4. 配置部署前的{{预渲染}}步骤
 
 SSR 配置选项：
+
 - {{`server.middlewareMode`}}：以中间件模式运行 Vite 服务器
 - {{`ssr.external`}}：指定始终外部化的依赖
 - {{`ssr.noExternal`}}：指定不外部化的依赖
@@ -349,6 +365,7 @@ export default {
 ```
 
 PWA 功能支持：
+
 - {{自动注册}} Service Worker
 - {{离线缓存}} 应用资源
 - {{安装提示}} 添加到主屏幕
@@ -373,6 +390,7 @@ Vite 配置文件（通常为 {{`vite.config.js`}}）具有以下特点：
 4. 支持{{条件配置}}和{{异步配置}}
 
 基本配置结构：
+
 ```js
 import { defineConfig } from 'vite'
 
@@ -387,6 +405,7 @@ export default defineConfig({
 ```
 
 条件配置示例：
+
 ```js
 export default defineConfig(({ command, mode }) => {
   if (command === 'serve') {
@@ -402,6 +421,7 @@ export default defineConfig(({ command, mode }) => {
 ```
 
 常用配置类别：
+
 - {{`plugins`}}：使用的 Vite 插件
 - {{`resolve`}}：模块解析选项
 - {{`css`}}：CSS 处理选项
@@ -440,6 +460,7 @@ Vite 开发服务器提供了多种可配置选项来满足不同的开发需求
    - {{`server.headers`}}：指定服务器响应的自定义标头
 
 代理配置示例：
+
 ```js
 export default {
   server: {
@@ -487,6 +508,7 @@ Vite 提供了多种构建优化选项，可以通过 `build` 配置对象进行
    - {{`build.watch`}}：开启滚动构建（与 Rollup 的 watch 模式相同）
 
 特殊模式配置：
+
 - {{`build.lib`}}：构建为库
 - {{`build.manifest`}}：生成包含非哈希资源文件名到其哈希版本的映射的清单文件
 
@@ -517,6 +539,7 @@ Vite 提供了依赖优化相关的配置选项，可通过 `optimizeDeps` 对�
    - {{`optimizeDeps.needsInterop`}}：指定强制使用 dynamic import 交互操作的包
 
 使用示例：
+
 ```js
 export default {
   optimizeDeps: {
@@ -528,6 +551,7 @@ export default {
 ```
 
 当以下情况发生时应考虑使用 `include`：
+
 - 动态导入的依赖项（如 `import('package')`）
 - 包含 `.vue`、`.jsx` 等非普通 JS 文件的依赖项
 - 裸模块导入的 CommonJS 依赖项
@@ -559,11 +583,13 @@ Vite 可以与多种后端框架集成，主要有以下几种方式：
    - Django 的 [django-vite](https://github.com/MrBin99/django-vite)
 
 前后端集成的关键配置：
+
 - {{`build.manifest`}}：生成资产清单，帮助后端框架查找正确的资源路径
 - {{`server.proxy`}}：在开发过程中将 API 请求代理到后端服务器
 - {{`base`}}：设置部署的基本公共路径，确保资源引用正确
 
 示例清单使用（PHP）：
+
 ```php
 // 读取清单
 $manifest = json_decode(file_get_contents('path/to/manifest.json'), true);
@@ -595,12 +621,14 @@ Vite 处理浏览器兼容性的方式分为开发和生产两个环境：
    - 使用官方插件 {{`@vitejs/plugin-legacy`}} 支持旧版浏览器
 
 `@vitejs/plugin-legacy` 的主要功能：
+
 - 为所有代码产生适用于旧版浏览器的版本
 - 生成相应的 {{polyfill chunks}}
 - 根据用户浏览器自动交付适当的版本
 - 默认目标为 `'defaults'`（> 0.5%, last 2 versions, Firefox ESR, not dead）
 
 配置示例：
+
 ```js
 import legacy from '@vitejs/plugin-legacy'
 
@@ -648,6 +676,7 @@ Vite 提供了与多种主流前端框架的无缝集成：
    - Elm：使用 {{`vite-plugin-elm`}}
 
 基本配置示例（Vue）：
+
 ```js
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -733,6 +762,7 @@ Vite 的命令行界面提供了多种命令和选项：
    - {{`--watch`}}：在监视模式下重建
 
 在 package.json 中的典型使用：
+
 ```json
 {
   "scripts": {
@@ -745,5 +775,3 @@ Vite 的命令行界面提供了多种命令和选项：
 
 > [!NOTE]
 > 费曼式解释：Vite 的命令行界面就像是一台多功能咖啡机的控制面板。根据你按下的按钮（命令），它会制作不同类型的咖啡（开发环境、生产构建等）。主按钮（主要命令）决定了你要做什么类型的咖啡，而调节旋钮（选项）则让你可以精细控制咖啡的浓度、温度和分量（端口、主机、输出目录等）。你可以使用预设（package.json 中的脚本）快速制作常用的咖啡类型，也可以通过组合不同的按钮和旋钮设置来创建完全符合你口味的特制咖啡。整个界面设计得直观易用，即使是咖啡新手也能快速上手。
-
-*** 
