@@ -1,0 +1,254 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 生成 Vite Mochi 卡片
+
+## 任务描述
+
+你的任务是生成一系列关于 Vite 的 Mochi 学习卡片。这些卡片将涵盖 Vite 的核心概念、配置方法、常用插件和特性、优化技巧以及最佳实践，旨在帮助学习者通过间隔重复方式有效掌握 Vite 相关知识。
+
+## 具体要求
+
+### 卡片格式
+
+遵循以下格式规范创建每张 Mochi 卡片：
+
+1. **结构要求**
+   - 每张卡片使用二级标题（`##`）作为问题标题
+   - 在标题下方添加所有必要的标签，必须以 `Tags:` 开头
+   - 使用三个连字符（`---`）作为问题与答案的分隔符
+   - 使用三个星号（`***`）作为不同卡片之间的分隔符
+
+2. **内容质量**
+   - 问题应明确具体，针对单一知识点
+   - 答案应简明扼要，提供准确完整的信息
+   - 代码示例应简洁有效，并标明编程语言
+   - 在涉及概念或原理的答案中添加费曼式解释
+   - 适当使用 Mermaid 图表增强理解和记忆
+   - 在答案中对重要的关键词使用填空（cloze deletions）格式 `{{关键词}}`，同一个关键词在答案中重复出现时，每次出现都要使用填空格式
+   - 当填空内容是代码时，应该使用 `{{`代码`}}` 格式，即在大括号内部使用反引号包裹代码
+
+3. **费曼式解释**
+   - 对于概念（`#Vite/Concept`）和原理（`#Vite/Principle`）类卡片，必须添加费曼式解释
+   - 使用 `> [!NOTE]` 格式的引用块
+   - 解释要通俗易懂，使用生动的类比
+   - 避免使用专业术语，用最简单的语言描述
+   - 按照以下步骤构建解释：
+     1. 明确定义概念
+     2. 用最简单的语言解释
+     3. 找出并解决解释中的难点
+     4. 优化并简化最终解释
+
+4. **可视化要求**
+   - 在适当的情况下使用 Mermaid 图表
+   - 图表类型选择：
+     - 流程图（flowchart）：表示开发流程、构建流程等
+     - 时序图（sequence）：展示请求处理、热更新流程等
+     - 类图（classDiagram）：展示组件关系、API 结构等
+   - Mermaid 代码要简洁，标注清晰
+
+5. **格式示例**
+
+   ````markdown
+   ## 什么是 Vite？
+
+   Tags: #Vite #Vite/Beginner #Vite/Concept #Vite/Core
+
+   ---
+
+   Vite（法语中"快"的意思）是一个现代化的{{前端构建工具}}，由 Vue.js 的创建者尤雨溪开发。它主要由两部分组成：
+   
+   1. 一个基于原生 {{ESM}} 的{{开发服务器}}，提供丰富的内置功能和极快的{{热模块替换}} (HMR)
+   2. 一个使用 {{Rollup}} 打包代码的{{构建命令}}
+
+   > [!NOTE]
+   > 费曼式解释：想象你正在建造一座乐高城堡。传统工具（如 Webpack）会在你开始玩之前，先把所有乐高积木粘在一起，这需要等待很长时间。而 Vite 则像一个聪明的助手，只会在你需要某个积木时立即递给你，不需要预先粘合所有积木。这样你可以立即开始建造，并且当你更换一个积木时，它只替换那一个积木而不是整个城堡，让你的建造过程变得超级快速。
+
+   ```mermaid
+   flowchart LR
+      A["浏览器请求"] --> B["Vite 开发服务器"]
+      B --> C["预构建依赖"]
+      B --> D["按需编译源码"]
+      C --> E["浏览器渲染"]
+      D --> E
+      style B fill:#646cff,stroke:#535bf2,stroke-width:2px
+   ```
+
+   ***
+
+   ## Vite 与传统打包工具的主要区别是什么？
+
+   Tags: #Vite #Vite/Beginner #Vite/Concept #Vite/Core
+
+   ---
+
+   Vite 与传统打包工具（如 Webpack）的主要区别在于：
+
+   1. {{开发环境}}下，Vite 利用{{浏览器原生 ES 模块}}支持，实现了{{无打包开发服务器}}，只在浏览器请求模块时进行{{按需编译}}
+   2. Vite 将依赖分为{{依赖}}和{{源码}}两类分别处理：
+      - {{依赖}}通常是不会变动的纯 JavaScript，Vite 会使用 {{esbuild}} 进行一次性{{预构建}}
+      - {{源码}}通常包含非 JavaScript 文件，需要转换，且会频繁变动，Vite 采用{{按需编译}}
+   3. {{生产环境}}下，Vite 使用 {{Rollup}} 进行打包，提供了一套构建优化的默认配置
+
+   > [!NOTE]
+   > 费曼式解释：传统工具就像准备一顿自助餐 - 即使客人还没来，你也得先把所有菜都做好摆在桌上。而 Vite 则像是一家快餐店 - 只有当客人点了某道菜，厨师才会立即烹饪那一道菜。随着菜单（代码）越来越大，自助餐的准备时间会越来越长，但快餐店始终能快速响应顾客的点单。这就是为什么随着项目变大，Vite 的启动速度优势会更加明显。
+
+   ```mermaid
+   flowchart TB
+      subgraph "传统打包工具"
+        A1["构建依赖图"] --> B1["打包全部代码"]
+        B1 --> C1["提供服务"]
+      end
+      
+      subgraph "Vite"
+        A2["预构建依赖"] --> B2["提供原生ESM服务"]
+        B2 --> C2["按需编译请求的模块"]
+      end
+      
+      style A2 fill:#646cff,stroke:#535bf2,stroke-width:2px
+      style B2 fill:#646cff,stroke:#535bf2,stroke-width:2px
+      style C2 fill:#646cff,stroke:#535bf2,stroke-width:2px
+   ```
+   ````
+
+### 标签系统
+
+每张卡片必须包含以下标签，标签列表必须以 `Tags:` 开头：
+
+1. **基础标签**
+   - 所有卡片必须添加 `#Vite` 标签
+
+2. **难度标签**（必选其一）
+   - `#Vite/Beginner` - 适合 Vite 入门者的基础知识
+   - `#Vite/Intermediate` - 需要一定 Vite 使用经验的进阶知识
+   - `#Vite/Advanced` - 涉及深入原理和复杂应用场景的专业知识
+
+3. **认知深度标签**（必选其一）
+   - `#Vite/Concept` - 关于 Vite 基本概念和术语的解释
+   - `#Vite/Usage` - 关于 Vite 的具体使用方法和配置
+   - `#Vite/Principle` - 关于 Vite 内部工作原理和机制的解释
+
+4. **主题标签**（必选其一或多个）
+   - `#Vite/Core` - Vite 的核心概念和基础配置
+   - `#Vite/Plugin` - Vite 插件相关知识
+   - `#Vite/Config` - Vite 配置文件的编写和管理
+   - `#Vite/HMR` - Vite 热模块替换相关知识
+   - `#Vite/ESM` - Vite 与 ES 模块相关知识
+   - `#Vite/DevServer` - Vite 开发服务器相关知识
+   - `#Vite/Build` - Vite 构建过程相关知识
+   - `#Vite/SSR` - Vite 服务端渲染相关知识
+   - `#Vite/PWA` - Vite PWA 支持相关知识
+   - `#Vite/Environment` - 不同环境(开发/生产)的 Vite 配置
+   - `#Vite/Integration` - Vite 与其他工具/框架的集成
+   - `#Vite/Migration` - 从其他构建工具迁移到 Vite 的知识
+   - `#Vite/Debugging` - Vite 开发过程的调试和问题排查
+   - `#Vite/Optimization` - Vite 性能优化相关知识
+
+### 内容覆盖范围
+
+生成的卡片应涵盖但不限于以下方面：
+
+- Vite 的基本概念（如 ESM、HMR、预构建等）
+- Vite 的工作原理（开发服务器、按需编译、构建过程等）
+- 常用配置选项及其作用
+- Vite 插件系统和常用插件的使用方法
+- 与各种前端框架（Vue、React、Svelte 等）的集成
+- 构建优化策略和技巧
+- 从其他构建工具（Webpack、Parcel 等）迁移到 Vite
+- 常见问题排查和解决方案
+- 最新版本的新特性和改进
+
+### 填空（Cloze Deletions）要求
+
+在答案中，应对以下类型的内容使用填空格式 `{{关键词}}`：
+
+- 专业术语和核心概念
+- 配置选项的名称和值
+- 重要的方法名和函数名
+- 关键的工作流程步骤
+- 需要特别记忆的数值或参数
+
+填空内容应该是答案中最需要记忆的部分，而不是普通的描述性文字。每个答案中至少包含 2-4 个填空，但不要过多以免干扰理解。
+
+**重要规则**：当同一个关键词在答案中多次出现时，每次出现都需要使用填空格式。例如，如果"热模块替换"这个术语在答案中出现了三次，则每次出现都应该写作 `{{热模块替换}}`，这有助于强化对重要概念的记忆和识别。
+
+## 评估标准
+
+生成的 Mochi 卡片将根据以下标准进行评估：
+
+1. **内容准确性**：卡片内容必须准确反映 Vite 的概念、用法和原理，没有技术错误。
+
+2. **知识覆盖面**：卡片集应全面覆盖 Vite 的主要知识点，从初级到高级，满足不同学习阶段的需求。
+
+3. **标签规范性**：每张卡片的标签必须符合规定的分类体系，正确反映卡片内容的难度、认知深度和主题。
+
+4. **问答质量**：
+   - 问题清晰明确，不含糊不清
+   - 答案简洁全面，容易理解和记忆
+   - 适当使用代码示例和图表说明复杂概念
+   - 费曼式解释通俗易懂，使用有效的类比
+   - 填空部分选择得当，突出重点内容
+
+5. **格式正确性**：严格遵循 Mochi 卡片的语法规则，正确使用 Markdown 格式。
+
+6. **学习效果**：
+   - 卡片设计应有助于知识的长期记忆和实际应用
+   - 可视化内容应增强对复杂概念的理解
+   - 费曼式解释应帮助建立直观的心智模型
+   - 填空练习应强化关键知识点的记忆
+
+## Mochi Documentation
+
+Mochi is an app to help you remember things. It uses a review scheduling system called [spaced repetition](mdc:https:/en.wikipedia.org/wiki/Spaced_repetition). This system will automatically schedule cards for review based on how well you already know them. Cards that you know well will appear less often, and cards you don't know well will appear more frequently.
+
+### Cards
+
+Cards are the heart of Mochi. They are formatted using [markdown](mdc:https:/www.markdownguide.org/getting-started), and can be used as note cards, or flash cards with multiple sides or faces. You can separate your card into sides by putting three dashes (`---`) between each side you want to create. For example:
+
+```markdown
+# What is the capital of France?
+
+---
+
+Paris
+```
+
+You can review cards using spaced repetition, or you can [archive](mdc:https:/mochi.cards/docs/#archiving) them if you don't want to review them regularly. Mochi can be used as a [zettelkasten](mdc:https:/zettelkasten.de/introduction) notebook.
+
+### Adding Sides
+
+Like traditional flash cards, Mochi cards can have one or two sides. You can separate "sides" in a card by adding three dashes on its own line: `---` The content above the line will be the first side, and the content below will be on the second side. When reviewing cards, only the first side will be shown, and you can press the space bar to reveal the next side. But why stop at two sides? With Mochi you can add as many "sides" as you want, and they will be revealed one at a time.
+
+### Cloze deletions
+
+Cloze deletions are a way of hiding information within a card when it's being reviewed.
+
+#### Simple deletions
+
+Mochi supports simple cloze deletions with the following markdown syntax:
+
+```markdown
+The Shiba Inu is a breed of {{hunting dog}} from {{Japan}}.
+```
+
+Where both "hunting dog" and "Japan" will be hidden when the card is reviewed.
+
+#### Cloze deletion groups
+
+You can also prefix an index number to your cloze deletions to create separate cloze groups for your card, one for each index, where only one cloze group will be hidden at a time. For example:
+
+```markdown
+The {{1::Shiba Inu}} is a breed of {{2::hunting dog}} from {{2::Japan}}.
+```
+
+In this example, you will be shown two different versions of the card, one where "Shiba Inu" is hidden, and one where "hunting dog" and "Japan" are hidden. These two versions will have their own review shedule and history.
+
+### Tags
+
+You can add tags to a card by typing a `#` followed by the tag name. For example `#food`. A list of tags used will appear on the left side bar based. This list is derived from the tags used in cards and cannot be modified without modifying the cards that use them.
+
+#### Hierarchical tags
+
+You can create nested tags by adding forward slashes (`/`) in your tags. For example `#sports/basketball/stats` will create a `#stats` tag that is nested under the `#basketball` tag which is in turn nested under the `#sports` tag.
